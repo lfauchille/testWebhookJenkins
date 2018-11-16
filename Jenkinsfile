@@ -1,33 +1,44 @@
-node {
-    try {
-    stage('Checkout') {
-        checkout scm
-        echo "Build Started"
-    }
+// node {
+//     try {
+//     stage('Checkout') {
+//         checkout scm
+//         echo "Build Started"
+//     }
 
-    stage('Build') {
-        docker.build("pythontest:${env.BUILD_ID}")
-    }
+//     stage('Build') {
+//         docker.build("pythontest:${env.BUILD_ID}")
+//     }
     
 
-    stage('Test') {
-        docker.image("pythontest:${env.BUILD_ID}").inside(){
-            sh 'python test.py'
-        }
-        //sh "docker run --rm ${imageName}:${env.BUILD_ID}"
-    }
+//     stage('Test') {
+//         docker.image("pythontest:${env.BUILD_ID}").inside(){
+//             sh 'python test.py'
+//         }
+//         //sh "docker run --rm ${imageName}:${env.BUILD_ID}"
+//     }
 
-    stage('Run') {
-        docker.image("pythontest:${env.BUILD_ID}").inside(){
-            sh 'python main.py'
-        }
-        // sh 'docker run --rm -p 8000:8000 pythontest:${env.BUILD_ID} python test.py'
-    }
+//     stage('Run') {
+//         docker.image("pythontest:${env.BUILD_ID}").inside(){
+//             sh 'python main.py'
+//         }
+//         // sh 'docker run --rm -p 8000:8000 pythontest:${env.BUILD_ID} python test.py'
+//     }
 
-    }catch(e){
-        currentBuild.result = 'FAILED'
-        throw e
-    }finally{
-        echo currentBuild.result
+//     }catch(e){
+//         currentBuild.result = 'FAILED'
+//         throw e
+//     }finally{
+//         echo currentBuild.result
+//     }
+// }
+
+pipeline {
+    agent { docker { image 'python:3.6' } }
+    stages {
+        stage('build') {
+            steps {
+                sh 'python --version'
+            }
+        }
     }
 }
