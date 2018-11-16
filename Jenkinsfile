@@ -1,4 +1,5 @@
-try {
+node {
+    try {
     stage('Checkout') {
         checkout scm
         echo "Build Started"
@@ -15,9 +16,10 @@ try {
         sh 'docker run --rm -p 80:8000 pythontest:${env.BUILD_ID}'
     }
 
-}catch(e){
-    currentBuild.result = 'FAILED'
-    throw er
-}finally{
-    notifySlack(currentBuild.result)
+    }catch(e){
+        currentBuild.result = 'FAILED'
+        throw er
+    }finally{
+        echo currentBuild.result
+    }
 }
