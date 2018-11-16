@@ -18,7 +18,7 @@ node {
     }
 
     stage('Run') {
-        docker.image("pythontest:${env.BUILD_ID}").inside(){
+        docker.image("pythontest:${env.BUILD_ID}").inside('-d -p 8000:8000'){
             sh 'python main.py'
         }
         // sh 'docker run --rm -p 8000:8000 pythontest:${env.BUILD_ID} python test.py'
